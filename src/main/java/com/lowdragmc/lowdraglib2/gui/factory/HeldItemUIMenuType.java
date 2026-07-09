@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,7 +33,8 @@ public class HeldItemUIMenuType {
         var heldItem = player.getItemInHand(hand);
         if (heldItem.getItem() instanceof HeldItemUI heldItemUI) {
             var holder = heldItemUI.createUIHolder(player, hand, heldItem);
-            return player.openMenu(holder).isPresent();
+            NetworkHooks.openScreen(player, holder, buffer -> holder.writeClientSideData(null, buffer));
+            return true;
         }
         return false;
     }

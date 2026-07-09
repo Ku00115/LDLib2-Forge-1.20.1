@@ -2,6 +2,7 @@ package com.lowdragmc.lowdraglib2.gui.holder;
 
 import com.lowdragmc.lowdraglib2.gui.factory.IContainerUIHolder;
 import com.lowdragmc.lowdraglib2.gui.ui.ModularUI;
+import com.lowdragmc.lowdraglib2.gui.ui.elements.ItemSlot;
 import lombok.Getter;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,11 +15,12 @@ import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ModularUIContainerMenu extends AbstractContainerMenu {
+public class ModularUIContainerMenu extends AbstractContainerMenu implements IModularUIHolderMenu {
     public final Inventory inventory;
     public final IContainerUIHolder uiHolder;
     @Getter
     public final ModularUI modularUI;
+    private final Map<Slot, ItemSlot> itemSlotMap = new HashMap<>();
 
     public ModularUIContainerMenu(MenuType<ModularUIContainerMenu> menuType,
                                   int windowID,
@@ -32,7 +34,33 @@ public class ModularUIContainerMenu extends AbstractContainerMenu {
     }
 
     public IModularUIHolderMenu asModularUIHolderMenu() {
-        return (IModularUIHolderMenu) this;
+        return this;
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable ModularUI ldlib2$getModularUI() {
+        return modularUI;
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable ItemSlot ldlib2$getItemSlot(Slot slot) {
+        return itemSlotMap.get(slot);
+    }
+
+    @Override
+    public void ldlib2$addSlot(ItemSlot itemSlot) {
+        itemSlotMap.put(itemSlot.getSlot(), itemSlot);
+    }
+
+    @Override
+    public void ldlib2$setModularUI(ModularUI modularUI) {
+        modularUI.setMenu(this);
+    }
+
+    public void syncModularSlotPositions() {
+        for (var itemSlot : itemSlotMap.values()) {
+            itemSlot.updateSlotPosition();
+        }
     }
 
     public Slot addModularSlot(Slot slot) {
@@ -166,5 +194,11 @@ public class ModularUIContainerMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player playerIn) {
         return uiHolder.isStillValid(playerIn);
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        modularUI.tickServer();
     }
 }

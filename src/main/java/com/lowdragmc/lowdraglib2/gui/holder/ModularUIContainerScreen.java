@@ -35,6 +35,12 @@ public class ModularUIContainerScreen extends AbstractContainerScreen<ModularUIC
     }
 
     @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        getMenu().syncModularSlotPositions();
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
     }

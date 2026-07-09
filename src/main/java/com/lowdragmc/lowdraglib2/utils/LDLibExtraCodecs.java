@@ -3,6 +3,7 @@ package com.lowdragmc.lowdraglib2.utils;
 import com.lowdragmc.lowdraglib2.Platform;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import com.google.gson.JsonElement;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import lombok.experimental.UtilityClass;
@@ -55,13 +56,29 @@ public final class LDLibExtraCodecs {
         }
     };
 
-    public final static Codec<Component> COMPONENT = Codec.STRING.xmap(
-            json -> {
-                var component = Component.Serializer.fromJson(json);
-                return component == null ? Component.empty() : component;
-            },
-            Component.Serializer::toJson
-    );
+    public final static Codec<Component> COMPONENT = new Codec<>() {
+        @Override
+        public <T> DataResult<Pair<Component, T>> decode(DynamicOps<T> ops, T input) {
+            var stringValue = ops.getStringValue(input).result();
+            try {
+                Component component;
+                if (stringValue.isPresent()) {
+                    component = Component.Serializer.fromJson(stringValue.get());
+                } else {
+                    JsonElement json = ops.convertTo(JsonOps.INSTANCE, input);
+                    component = Component.Serializer.fromJson(json);
+                }
+                return DataResult.success(Pair.of(component == null ? Component.empty() : component, input));
+            } catch (Exception e) {
+                return DataResult.error(() -> "Invalid component: " + e.getMessage());
+            }
+        }
+
+        @Override
+        public <T> DataResult<T> encode(Component input, DynamicOps<T> ops, T prefix) {
+            return DataResult.success(ops.createString(Component.Serializer.toJson(input)));
+        }
+    };
 
     public final static PrimitiveCodec<Character> CHAR = new PrimitiveCodec<>() {
         public <T> DataResult<Character> read(DynamicOps<T> ops, T input) {
