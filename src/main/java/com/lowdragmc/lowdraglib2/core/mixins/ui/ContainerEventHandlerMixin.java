@@ -18,7 +18,7 @@ public interface ContainerEventHandlerMixin extends GuiEventListener{
     List<? extends GuiEventListener> children();
 
     @Inject(method = "mouseDragged", at = @At(value = "HEAD"), cancellable = true)
-    private void ldlib2$mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY, CallbackInfoReturnable<Boolean> cir) {
+    public default void ldlib2$mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY, CallbackInfoReturnable<Boolean> cir) {
         for (var child : children()) {
             if (child instanceof IModularUIHolder holder) {
                 var mui = holder.getModularUI();

@@ -14,7 +14,6 @@
     "ObjModelMixin",
     "ParticleEngineAccessor",
     "ParticleEngineMixin",
-    "SimpleTextureMixin",
     "WorldRendererMixin",
     "accessor.BufferBuilderAccessor",
     "accessor.MinecraftAccessor",
