@@ -7,16 +7,12 @@ import com.lowdragmc.lowdraglib2.syncdata.holder.blockentity.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author KilaBash
@@ -25,10 +21,6 @@ import org.jetbrains.annotations.Nullable;
  */
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin {
-
-    @Shadow
-    @Nullable
-    public abstract Level getLevel();
 
     @Inject(method = "getUpdateTag", at = @At(value = "RETURN"))
     private void injectGetUpdateTag(HolderLookup.Provider provider, CallbackInfoReturnable<CompoundTag> cir) {
@@ -56,7 +48,7 @@ public abstract class BlockEntityMixin {
 
     @Inject(method = "setRemoved", at = @At(value = "RETURN"))
     private void injectSetRemoved(CallbackInfo ci) {
-        if (this instanceof ISyncPersistRPCBlockEntity syncMangedHolder && getLevel() instanceof ServerLevel) {
+        if (this instanceof ISyncPersistRPCBlockEntity syncMangedHolder && ((BlockEntity) (Object) this).getLevel() instanceof ServerLevel) {
             syncMangedHolder.detachAsyncLogic();
         }
     }
@@ -65,7 +57,7 @@ public abstract class BlockEntityMixin {
     private void injectClearRemoved(CallbackInfo ci) {
         if (this instanceof IManagedHolder managed) {
             managed.getRootStorage().requireInit();
-            if (managed instanceof ISyncMangedHolder syncMangedHolder && getLevel() instanceof ServerLevel) {
+            if (managed instanceof ISyncMangedHolder syncMangedHolder && ((BlockEntity) (Object) this).getLevel() instanceof ServerLevel) {
                 syncMangedHolder.attachAsyncLogic();
             }
         }
