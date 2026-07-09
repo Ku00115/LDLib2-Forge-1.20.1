@@ -31,7 +31,7 @@ public abstract class WorldLoaderMixin {
         Platform.RESOURCE_MANAGER = resourceManager;
     }
 
-    @Inject(method = "lambda$load$0", at = @At(value = "HEAD"))
+    @Inject(method = {"lambda$load$0", "m_214368_"}, at = @At(value = "HEAD"))
     private static void ldlib2$closeResourceManager(CloseableResourceManager closeableresourcemanager, ReloadableServerResources p_214370_, Throwable p_214371_, CallbackInfo ci) {
         Platform.RESOURCE_MANAGER = null;
     }
