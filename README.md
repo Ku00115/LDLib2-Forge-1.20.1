@@ -32,7 +32,7 @@
 This branch/repository is a community port targeting:
 
 - Minecraft `1.20.1`
-- Forge `47.4.10`
+- Forge `47.4.10+` (tested on `47.4.20`)
 - Java `17`
 - Official Mojang mappings
 - Mod id `ldlib2`
@@ -41,8 +41,8 @@ This branch/repository is a community port targeting:
 Current validation:
 
 - `compileJava` passes.
-- `build` passes, including `jarJar` and reobfuscation tasks.
-- `runClient` reaches an integrated single-player world in the Forge dev runtime.
+- `compileJava reobfJar reobfJarJar sourcesJar` passes.
+- The generated `-all.jar` has been tested in a normal Forge `47.4.20` launcher profile and reaches the game.
 
 See [NOTICE.md](NOTICE.md) for original project attribution and port notes.
 

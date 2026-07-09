@@ -15,7 +15,7 @@ The original project name, mod id, mod display name, author metadata, and projec
 ## Port Target
 
 - Minecraft: 1.20.1
-- Forge: 47.4.10
+- Forge: 47.4.10+ (tested on 47.4.20)
 - Java: 17
 - Mappings: official
 - Mod id: ldlib2
@@ -30,9 +30,10 @@ The port has been checked with:
 .\gradlew.bat --no-daemon --console=plain compileJava
 .\gradlew.bat --no-daemon --console=plain build
 .\gradlew.bat --no-daemon --console=plain runClient
+.\gradlew.bat --no-daemon --console=plain compileJava reobfJar reobfJarJar sourcesJar
 ```
 
-The Forge dev client reaches an integrated single-player world with LDLib2 loaded.
+The generated all-in-one jar has also been tested in a normal Forge 47.4.20 launcher profile and reaches the game with LDLib2 loaded.
 
 ## Attribution
 

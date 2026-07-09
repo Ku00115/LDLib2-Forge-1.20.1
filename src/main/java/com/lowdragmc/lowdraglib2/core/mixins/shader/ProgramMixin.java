@@ -37,7 +37,7 @@ public abstract class ProgramMixin {
 //        }
 //    }
 
-    @WrapMethod(method = "compileShader")
+    @WrapMethod(method = {"compileShader", "m_166604_"})
     private static Program ldlib2$compileShader(Program.Type type, String name,
                                                 InputStream shaderData, String sourceName,
                                                 GlslPreprocessor preprocessor,
@@ -48,9 +48,10 @@ public abstract class ProgramMixin {
         return original.call(type, name, shaderData, sourceName, preprocessor);
     }
 
-    @ModifyExpressionValue(method = "compileShaderInternal", at = @At(
+    @ModifyExpressionValue(method = {"compileShaderInternal", "m_166612_"}, require = 0, at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/blaze3d/preprocessor/GlslPreprocessor;process(Ljava/lang/String;)Ljava/util/List;"))
+            target = "Lcom/mojang/blaze3d/preprocessor/GlslPreprocessor;m_166461_(Ljava/lang/String;)Ljava/util/List;",
+            remap = false))
     private static List<String> ldlib2$appendDefines(List<String> original) {
         if (LDProgramDefineManager.hasProgramDefines() && !original.isEmpty()) {
             while (original.get(0).isBlank()) {

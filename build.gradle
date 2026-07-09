@@ -165,6 +165,7 @@ dependencies {
     jarJar "dev.vfyjxf:taffy:[1.1.4,1.2)"
     implementation "io.github.llamalad7:mixinextras-forge:0.4.1"
     compileOnly "io.github.llamalad7:mixinextras-common:0.4.1"
+    jarJar "io.github.llamalad7:mixinextras-forge:[0.4.1,0.5)"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
