@@ -1,5 +1,6 @@
 package com.lowdragmc.lowdraglib2.core.mixins;
 
+import com.lowdragmc.lowdraglib2.Platform;
 import com.lowdragmc.lowdraglib2.syncdata.holder.IManagedHolder;
 import com.lowdragmc.lowdraglib2.syncdata.holder.IPersistManagedHolder;
 import com.lowdragmc.lowdraglib2.syncdata.holder.ISyncMangedHolder;
@@ -22,38 +23,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin {
 
-    @Inject(method = "getUpdateTag", at = @At(value = "RETURN"))
-    private void injectGetUpdateTag(HolderLookup.Provider provider, CallbackInfoReturnable<CompoundTag> cir) {
+    @Inject(method = {"getUpdateTag", "m_5995_"}, at = @At(value = "RETURN"))
+    private void injectGetUpdateTag(CallbackInfoReturnable<CompoundTag> cir) {
         if (this instanceof ISyncMangedHolder syncMangedHolder) {
             var tag = cir.getReturnValue();
-            tag.put(syncMangedHolder.getSyncTag(), syncMangedHolder.serializeInitialData(provider));
+            tag.put(syncMangedHolder.getSyncTag(), syncMangedHolder.serializeInitialData(ldlib2$getRegistryProvider()));
         }
     }
 
-    @Inject(method = "saveAdditional", at = @At(value = "RETURN"))
-    private void injectSaveAdditional(CompoundTag pTag, HolderLookup.Provider provider, CallbackInfo ci) {
+    @Inject(method = {"saveAdditional", "m_183515_"}, at = @At(value = "RETURN"))
+    private void injectSaveAdditional(CompoundTag pTag, CallbackInfo ci) {
         if (this instanceof IPersistManagedHolder persistManagedHolder) {
-            persistManagedHolder.saveManagedPersistentData(provider, pTag, false);
+            persistManagedHolder.saveManagedPersistentData(ldlib2$getRegistryProvider(), pTag, false);
         }
     }
 
-    @Inject(method = "loadAdditional", at = @At(value = "RETURN"))
-    private void injectLoad(CompoundTag pTag, HolderLookup.Provider provider, CallbackInfo ci) {
+    @Inject(method = {"load", "m_142466_"}, at = @At(value = "RETURN"))
+    private void injectLoad(CompoundTag pTag, CallbackInfo ci) {
         if (this instanceof ISyncMangedHolder syncMangedHolder && pTag.get(syncMangedHolder.getSyncTag()) instanceof CompoundTag tag) {
-            syncMangedHolder.deserializeInitialData(provider, tag);
+            syncMangedHolder.deserializeInitialData(ldlib2$getRegistryProvider(), tag);
         } else if (this instanceof IPersistManagedHolder persistManagedHolder) {
-            persistManagedHolder.loadManagedPersistentData(provider, pTag);
+            persistManagedHolder.loadManagedPersistentData(ldlib2$getRegistryProvider(), pTag);
         }
     }
 
-    @Inject(method = "setRemoved", at = @At(value = "RETURN"))
+    @Inject(method = {"setRemoved", "m_7651_"}, at = @At(value = "RETURN"))
     private void injectSetRemoved(CallbackInfo ci) {
         if (this instanceof ISyncPersistRPCBlockEntity syncMangedHolder && ((BlockEntity) (Object) this).getLevel() instanceof ServerLevel) {
             syncMangedHolder.detachAsyncLogic();
         }
     }
 
-    @Inject(method = "clearRemoved", at = @At(value = "RETURN"))
+    @Inject(method = {"clearRemoved", "m_6339_"}, at = @At(value = "RETURN"))
     private void injectClearRemoved(CallbackInfo ci) {
         if (this instanceof IManagedHolder managed) {
             managed.getRootStorage().requireInit();
@@ -61,6 +62,11 @@ public abstract class BlockEntityMixin {
                 syncMangedHolder.attachAsyncLogic();
             }
         }
+    }
+
+    private HolderLookup.Provider ldlib2$getRegistryProvider() {
+        var level = ((BlockEntity) (Object) this).getLevel();
+        return level == null ? Platform.getFrozenRegistry() : level.registryAccess();
     }
 
 }
