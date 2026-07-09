@@ -31,7 +31,9 @@ public class KJSBlockUIMenuType {
         var id = data.readUtf();
         var event = new BlockUIEventJS(player, pos, blockstate, id);
         UIEvents.BLOCK.post(ScriptType.CLIENT, id, event);
-        return event.createMenu(windowId, inv, player);
+        var menu = event.createMenu(windowId, inv, player);
+        menu.readInitialData(data);
+        return menu;
     }
 
     @ParametersAreNonnullByDefault

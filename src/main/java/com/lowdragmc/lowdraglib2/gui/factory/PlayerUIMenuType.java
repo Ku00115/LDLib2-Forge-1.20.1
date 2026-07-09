@@ -64,7 +64,9 @@ public class PlayerUIMenuType {
         var id = data.readResourceLocation();
         var holder = UI_HOLDERS.get(id).apply(inv.player);
         if (holder == null) throw new IllegalArgumentException("No player ui holder found for id " + id);
-        return new ModularUIContainerMenu(LDMenuTypes.PLAYER_UI.get(), windowId, inv, holder);
+        var menu = new ModularUIContainerMenu(LDMenuTypes.PLAYER_UI.get(), windowId, inv, holder);
+        menu.readInitialData(data);
+        return menu;
     }
 
 

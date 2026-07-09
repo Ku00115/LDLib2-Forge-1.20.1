@@ -30,7 +30,9 @@ public class KJSHeldItemUIMenuType {
         var id = data.readUtf();
         var event = new ItemUIEventJS(player, hand, itemstack, id);
         UIEvents.ITEM.post(ScriptType.CLIENT, id, event);
-        return event.createMenu(windowId, inv, player);
+        var menu = event.createMenu(windowId, inv, player);
+        menu.readInitialData(data);
+        return menu;
     }
 
     @ParametersAreNonnullByDefault

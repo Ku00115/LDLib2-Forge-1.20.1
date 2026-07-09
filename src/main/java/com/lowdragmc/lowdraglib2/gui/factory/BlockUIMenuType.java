@@ -46,7 +46,9 @@ public class BlockUIMenuType {
         var blockstate = BLOCK_STATE_STREAM_CODEC.decode(data);
         if (blockstate.getBlock() instanceof BlockUI blockUI) {
             var holder = blockUI.createUIHolder(player, pos, blockstate);
-            return new ModularUIContainerMenu(LDMenuTypes.BLOCK_UI.get(), windowId, inv, holder);
+            var menu = new ModularUIContainerMenu(LDMenuTypes.BLOCK_UI.get(), windowId, inv, holder);
+            menu.readInitialData(data);
+            return menu;
         }
         throw new IllegalArgumentException("No held item ui found for block " + blockstate);
     }

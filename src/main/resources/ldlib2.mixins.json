@@ -43,7 +43,6 @@
     "kjs.ServerScriptManagerAccessor",
     "ui.AbstractContainerMenuMixin",
     "ui.InventoryMenuMixin",
-    "ui.MenuTypeMixin",
     "ui.ServerPlayerMixin"
   ],
   "injectors": {

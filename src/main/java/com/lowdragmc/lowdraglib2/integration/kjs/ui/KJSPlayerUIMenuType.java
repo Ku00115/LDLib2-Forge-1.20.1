@@ -23,7 +23,9 @@ public class KJSPlayerUIMenuType {
         var id = data.readUtf();
         var event = new PlayerUIEventJS(player, id);
         UIEvents.PLAYER.post(ScriptType.CLIENT, id, event);
-        return event.createMenu(windowId, inv, player);
+        var menu = event.createMenu(windowId, inv, player);
+        menu.readInitialData(data);
+        return menu;
     }
 
     @ParametersAreNonnullByDefault

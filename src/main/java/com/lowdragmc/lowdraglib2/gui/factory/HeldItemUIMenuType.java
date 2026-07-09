@@ -45,7 +45,9 @@ public class HeldItemUIMenuType {
         var itemstack = ByteBufCodecs.ITEM_STACK.decode(data);
         if (itemstack.getItem() instanceof HeldItemUI heldItemUI) {
             var holder = heldItemUI.createUIHolder(player, hand, itemstack);
-            return new ModularUIContainerMenu(LDMenuTypes.HELD_ITEM_UI.get(), windowId, inv, holder);
+            var menu = new ModularUIContainerMenu(LDMenuTypes.HELD_ITEM_UI.get(), windowId, inv, holder);
+            menu.readInitialData(data);
+            return menu;
         }
         throw new IllegalArgumentException("No held item ui found for item " + itemstack);
     }
