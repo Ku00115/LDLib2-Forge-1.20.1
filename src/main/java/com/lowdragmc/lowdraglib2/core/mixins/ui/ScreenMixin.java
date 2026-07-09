@@ -18,10 +18,6 @@ import java.util.List;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin extends AbstractContainerEventHandler implements ContainerEventHandler, GuiEventListener {
-    @Shadow(aliases = "f_96541_")
-    @org.jetbrains.annotations.Nullable
-    protected Minecraft minecraft;
-
     @Shadow
     public abstract List<? extends GuiEventListener> children();
 
@@ -51,10 +47,11 @@ public abstract class ScreenMixin extends AbstractContainerEventHandler implemen
 
     @Inject(method = "keyPressed", at = @At(value = "HEAD"), cancellable = true)
     private void ldlib2$keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        var minecraft = Minecraft.getInstance();
         for (var child : children()) {
             if (child instanceof IModularUIHolder holder) {
                 var mui = holder.getModularUI();
-                if (minecraft != null && mui != null) {
+                if (mui != null) {
                     if (!mui.shouldCloseOnKeyInventory()) {
                         InputConstants.Key mouseKey = InputConstants.getKey(keyCode, scanCode);
                         if (minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
