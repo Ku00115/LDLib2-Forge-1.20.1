@@ -16,7 +16,6 @@
     "ParticleEngineMixin",
     "WorldRendererMixin",
     "accessor.BufferBuilderAccessor",
-    "accessor.MinecraftAccessor",
     "accessor.ModelBakeryAccessor",
     "accessor.MouseHandlerAccessor",
     "accessor.ObjModelAccessor",

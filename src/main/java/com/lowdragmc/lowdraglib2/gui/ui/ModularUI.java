@@ -2,7 +2,6 @@ package com.lowdragmc.lowdraglib2.gui.ui;
 
 import com.lowdragmc.lowdraglib2.LDLib2;
 import com.lowdragmc.lowdraglib2.Platform;
-import com.lowdragmc.lowdraglib2.core.mixins.accessor.MinecraftAccessor;
 import com.lowdragmc.lowdraglib2.gui.ColorPattern;
 import com.lowdragmc.lowdraglib2.gui.holder.DebugScreen;
 import com.lowdragmc.lowdraglib2.gui.ui.debugger.UIDebugger;
@@ -1088,8 +1087,8 @@ public class ModularUI {
         @Override
         public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
             // update tick
-            if (tickWhileRending && Minecraft.getInstance() instanceof MinecraftAccessor accessor) {
-                var currentTick = accessor.ldlib2$getClientTickCount();
+            if (tickWhileRending) {
+                var currentTick = System.currentTimeMillis() / 50L;
                 if (currentTick != lastTick) {
                     tick();
                     lastTick = currentTick;
