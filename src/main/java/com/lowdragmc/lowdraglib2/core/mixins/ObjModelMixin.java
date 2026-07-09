@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-@Mixin(targets = "net.minecraftforge.client.model.obj.ObjModel$ModelMesh")
+@Mixin(targets = "net.minecraftforge.client.model.obj.ObjModel$ModelMesh", remap = false)
 public abstract class ObjModelMixin {
 
     @Shadow @Final ObjModel this$0;
@@ -35,7 +35,8 @@ public abstract class ObjModelMixin {
     @Shadow @Nullable public ObjMaterialLibrary.@Nullable Material mat;
 
     @Inject(method = "bake", at = @At(value = "INVOKE",
-            target = "Lnet/minecraftforge/client/model/obj/ObjModel;makeQuad([[IILorg/joml/Vector4f;Lorg/joml/Vector4f;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lcom/mojang/math/Transformation;)Lorg/apache/commons/lang3/tuple/Pair;"))
+            target = "Lnet/minecraftforge/client/model/obj/ObjModel;makeQuad([[IILorg/joml/Vector4f;Lorg/joml/Vector4f;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lcom/mojang/math/Transformation;)Lorg/apache/commons/lang3/tuple/Pair;",
+            remap = false), remap = false)
     private void ldlib2$bake(CompositeRenderable.PartBuilder<?> builder,
                              IGeometryBakingContext configuration,
                              CallbackInfo ci,
@@ -57,7 +58,8 @@ public abstract class ObjModelMixin {
     }
 
     @Inject(method = "addQuads", at = @At(value = "INVOKE",
-            target = "Lnet/minecraftforge/client/model/obj/ObjModel;makeQuad([[IILorg/joml/Vector4f;Lorg/joml/Vector4f;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lcom/mojang/math/Transformation;)Lorg/apache/commons/lang3/tuple/Pair;"))
+            target = "Lnet/minecraftforge/client/model/obj/ObjModel;makeQuad([[IILorg/joml/Vector4f;Lorg/joml/Vector4f;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lcom/mojang/math/Transformation;)Lorg/apache/commons/lang3/tuple/Pair;",
+            remap = false), remap = false)
     private void ldlib2$addQuads(IGeometryBakingContext owner,
                                  IModelBuilder<?> modelBuilder,
                                  Function<Material, TextureAtlasSprite> spriteGetter,
@@ -127,7 +129,7 @@ public abstract class ObjModelMixin {
                             faces[limit - 1], faces[limit], faces[0]
                     });
 
-            default -> { /* remainder == 0，do nothing */ }
+            default -> { /* remainder == 0?do nothing */ }
         }
 
         return parts;

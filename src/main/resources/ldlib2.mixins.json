@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.lowdragmc.lowdraglib2.core.mixins",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "ldlib2.refmap.json",
   "plugin": "com.lowdragmc.lowdraglib2.core.mixins.LDLib2MixinPlugin",
   "client": [
     "BlockEntityRendererDispatcherMixin",
@@ -15,7 +16,6 @@
     "ParticleEngineAccessor",
     "ParticleEngineMixin",
     "WorldRendererMixin",
-    "accessor.BufferBuilderAccessor",
     "accessor.ModelBakeryAccessor",
     "accessor.MouseHandlerAccessor",
     "accessor.ObjModelAccessor",
@@ -27,7 +27,6 @@
     "shader.ProgramTypeMixin",
     "shader.ShaderInstanceMixin",
     "ui.AbstractContainerScreenMixin",
-    "ui.ContainerEventHandlerMixin",
     "ui.ScreenMixin"
   ],
   "mixins": [
@@ -40,7 +39,6 @@
     "accessor.DelegatingOpsAccessor",
     "accessor.SlotAccessor",
     "emi.RecipeScreenMixin",
-    "kjs.ServerScriptManagerAccessor",
     "ui.AbstractContainerMenuMixin",
     "ui.InventoryMenuMixin",
     "ui.ServerPlayerMixin"

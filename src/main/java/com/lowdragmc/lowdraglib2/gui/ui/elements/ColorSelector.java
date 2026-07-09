@@ -4,7 +4,6 @@ import com.lowdragmc.lowdraglib2.client.shader.LDLibRenderTypes;
 import com.lowdragmc.lowdraglib2.client.shader.LDLibShaders;
 import com.lowdragmc.lowdraglib2.configurator.ui.NumberConfigurator;
 import com.lowdragmc.lowdraglib2.configurator.ui.StringConfigurator;
-import com.lowdragmc.lowdraglib2.core.mixins.accessor.BufferBuilderAccessor;
 import com.lowdragmc.lowdraglib2.editor.ClipboardManager;
 import com.lowdragmc.lowdraglib2.gui.ui.UIElement;
 import com.lowdragmc.lowdraglib2.gui.ui.event.UIEvent;
@@ -24,8 +23,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.appliedenergistics.yoga.YogaEdge;
 import org.appliedenergistics.yoga.YogaGutter;
-import org.lwjgl.system.MemoryUtil;
-
 import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.IntConsumer;
@@ -508,15 +505,12 @@ public class ColorSelector extends BindableUIElement<Integer> {
      */
     @OnlyIn(Dist.CLIENT)
     private void putColor(VertexConsumer buffer, float h, float s, float b, float a) {
-        if (buffer instanceof BufferBuilderAccessor accessor) {
-            var i = accessor.invokeBeginElement(LDLibShaders.HSB_Alpha);
-            if (i != -1L) {
-                MemoryUtil.memPutFloat(i, h);
-                MemoryUtil.memPutFloat(i + 4L, s);
-                MemoryUtil.memPutFloat(i + 8L, b);
-                MemoryUtil.memPutFloat(i + 12L, a);
-            }
-        }
+        buffer.misc(
+                LDLibShaders.HSB_Alpha,
+                Float.floatToRawIntBits(h),
+                Float.floatToRawIntBits(s),
+                Float.floatToRawIntBits(b),
+                Float.floatToRawIntBits(a));
     }
 
 }

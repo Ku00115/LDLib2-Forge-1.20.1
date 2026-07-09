@@ -39,7 +39,7 @@ public abstract class BlockRenderDispatcherMixin {
     @Final
     private RandomSource random;
 
-    @Inject(method = "renderBreakingTexture(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/BlockAndTintGetter;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraftforge/client/model/data/ModelData;)V", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "renderBreakingTexture(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/BlockAndTintGetter;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraftforge/client/model/data/ModelData;)V", at = @At(value = "HEAD"), cancellable = true, remap = false)
     private void ldlib2$renderBreakingTexture(BlockState state, BlockPos pos, BlockAndTintGetter level,
                                              PoseStack poseStack, VertexConsumer consumer,
                                              ModelData modelData, CallbackInfo ci) {

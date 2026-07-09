@@ -149,7 +149,7 @@ public class ModelFactory {
                 return ((ModelBakeryAccessor) modelBakery).invokeGetModel(modelLocation);
             }
         } catch (Throwable ignored) {
-            return ((ModelBakeryAccessor) modelBakery).getMissingModel();
+            return ((ModelBakeryAccessor) modelBakery).invokeGetModel(ModelBakery.MISSING_MODEL_LOCATION);
         }
     }
 
@@ -182,7 +182,7 @@ public class ModelFactory {
                 model.resolveParents(accessor::invokeGetModel);
                 return model;
             } catch (Throwable ignored) {
-                return accessor.getMissingModel();
+                return accessor.invokeGetModel(ModelBakery.MISSING_MODEL_LOCATION);
             }
         }
     }
@@ -194,7 +194,7 @@ public class ModelFactory {
                 return ((ModelBakeryAccessor) modelBakery).getUnbakedCache().get(modelLocation);
             }
         } catch (Throwable ignored) {
-            return ((ModelBakeryAccessor) modelBakery).getMissingModel();
+            return ((ModelBakeryAccessor) modelBakery).invokeGetModel(ModelBakery.MISSING_MODEL_LOCATION);
         }
     }
 
