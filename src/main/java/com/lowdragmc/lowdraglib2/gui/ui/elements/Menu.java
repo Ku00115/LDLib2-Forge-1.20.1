@@ -139,6 +139,7 @@ public class Menu<K, T> extends UIElement {
         getLayout().minWidth(120);
         getStyle().backgroundTexture(Sprites.RECT_SOLID);
         getStyle().zIndex(100);
+        setOverflowVisible(true);
         setFocusable(true);
         addEventListener(UIEvents.BLUR, this::onBlur, true);
 
@@ -241,7 +242,8 @@ public class Menu<K, T> extends UIElement {
                 var container = new UIElement().layout(layout -> {
                     layout.flexDirection(FlexDirection.ROW);
                     layout.alignItems(AlignItems.CENTER);
-                }).style(style -> style.backgroundTexture(textureProvider.apply(child)))
+                }).setOverflowVisible(true)
+                        .style(style -> style.backgroundTexture(textureProvider.apply(child)))
                         .addChild(new UIElement().layout(layout -> {
                             layout.flex(1);
                         }).addChild(uiProvider.apply(child.getKey())))
