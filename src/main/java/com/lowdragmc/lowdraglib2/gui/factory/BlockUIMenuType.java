@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,8 +33,7 @@ public class BlockUIMenuType {
         var blockstate = player.level().getBlockState(pos);
         if (blockstate.getBlock() instanceof BlockUI blockUI) {
             var holder = blockUI.createUIHolder(player, pos, blockstate);
-            NetworkHooks.openScreen(player, holder, buffer -> holder.writeClientSideData(null, buffer));
-            return true;
+            return LDMenuNetworkHooks.openScreen(player, holder, buffer -> holder.writeClientSideData(null, buffer));
         }
         return false;
     }

@@ -1,5 +1,6 @@
 package com.lowdragmc.lowdraglib2.integration.kjs.ui;
 
+import com.lowdragmc.lowdraglib2.gui.factory.LDMenuNetworkHooks;
 import com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerMenu;
 import com.lowdragmc.lowdraglib2.utils.codec.ByteBufCodecs;
 import dev.latvian.mods.kubejs.script.ScriptType;
@@ -20,7 +21,7 @@ public class KJSHeldItemUIMenuType {
         var heldItem = player.getItemInHand(hand);
         var event = new ItemUIEventJS(player, hand, heldItem, id);
         UIEvents.ITEM.post(ScriptType.SERVER, id, event);
-        return player.openMenu(event).isPresent();
+        return LDMenuNetworkHooks.openScreen(player, event, buffer -> event.writeClientSideData(null, buffer));
     }
 
     public static ModularUIContainerMenu create(int windowId, Inventory inv, FriendlyByteBuf data) {

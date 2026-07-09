@@ -1,6 +1,7 @@
 package com.lowdragmc.lowdraglib2.integration.kjs.ui;
 
 import com.lowdragmc.lowdraglib2.gui.factory.BlockUIMenuType;
+import com.lowdragmc.lowdraglib2.gui.factory.LDMenuNetworkHooks;
 import com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerMenu;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.HideFromJS;
@@ -21,7 +22,7 @@ public class KJSBlockUIMenuType {
         var blockstate = player.level().getBlockState(pos);
         var event = new BlockUIEventJS(player, pos, blockstate, id);
         UIEvents.BLOCK.post(ScriptType.SERVER, id, event);
-        return player.openMenu(event).isPresent();
+        return LDMenuNetworkHooks.openScreen(player, event, buffer -> event.writeClientSideData(null, buffer));
     }
 
     public static ModularUIContainerMenu create(int windowId, Inventory inv, FriendlyByteBuf data) {

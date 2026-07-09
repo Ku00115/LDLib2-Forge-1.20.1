@@ -40,8 +40,7 @@
     "accessor.SlotAccessor",
     "emi.RecipeScreenMixin",
     "ui.AbstractContainerMenuMixin",
-    "ui.InventoryMenuMixin",
-    "ui.ServerPlayerMixin"
+    "ui.InventoryMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1

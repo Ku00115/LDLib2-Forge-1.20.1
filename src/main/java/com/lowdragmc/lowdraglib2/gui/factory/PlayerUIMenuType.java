@@ -10,7 +10,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
@@ -56,8 +55,7 @@ public class PlayerUIMenuType {
                 return new ModularUIContainerMenu(LDMenuTypes.PLAYER_UI.get(), containerId, playerInventory, holder);
             }
         };
-        NetworkHooks.openScreen(serverPlayer, provider, buffer -> buffer.writeResourceLocation(id));
-        return true;
+        return LDMenuNetworkHooks.openScreen(serverPlayer, provider, buffer -> buffer.writeResourceLocation(id));
     }
 
     public static ModularUIContainerMenu create(int windowId, Inventory inv, FriendlyByteBuf data) {
