@@ -1,6 +1,9 @@
 package com.lowdragmc.lowdraglib2.client.renderer.block;
 
+import com.lowdragmc.lowdraglib2.client.renderer.IBlockRendererProvider;
 import com.lowdragmc.lowdraglib2.client.renderer.IRenderer;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlock;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -27,7 +30,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-class RendererBlockRenderer implements IRenderer {
+public final class RendererBlockRenderer implements IRenderer {
+
+    public static final RendererBlockRenderer INSTANCE = new RendererBlockRenderer();
+
+    public static IRenderer getRenderer(BlockState state) {
+        if (state.getBlock() == RendererBlock.BLOCK) {
+            return INSTANCE;
+        }
+        if (state.getBlock() instanceof IBlockRendererProvider rendererProvider) {
+            return rendererProvider.getRenderer(state);
+        }
+        return null;
+    }
 
     public Optional<RendererBlockEntity> getMachine(@Nullable BlockEntity blockEntity) {
         return Optional.ofNullable(blockEntity).filter(RendererBlockEntity.class::isInstance).map(RendererBlockEntity.class::cast);
@@ -49,7 +64,8 @@ class RendererBlockRenderer implements IRenderer {
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> renderModel(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos, @Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType) {
         return getMachine(level, pos)
-                .map(machine -> machine.getRenderer().renderModel(level, pos, state, side, rand, data, renderType))
+                .map(RendererBlockRenderer::getMachineRenderer)
+                .map(renderer -> renderer.renderModel(level, pos, state, side, rand, data, renderType))
                 .orElseGet(Collections::emptyList);
     }
 
@@ -57,7 +73,8 @@ class RendererBlockRenderer implements IRenderer {
     @OnlyIn(Dist.CLIENT)
     public ChunkRenderTypeSet getRenderTypes(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource rand, ModelData modelData) {
         return getMachine(level, pos)
-                .map(machine -> machine.getRenderer().getRenderTypes(level, pos, state, rand, modelData))
+                .map(RendererBlockRenderer::getMachineRenderer)
+                .map(renderer -> renderer.getRenderTypes(level, pos, state, rand, modelData))
                 .orElseGet(() -> IRenderer.super.getRenderTypes(level, pos, state, rand, modelData));
     }
 
@@ -66,31 +83,36 @@ class RendererBlockRenderer implements IRenderer {
     @OnlyIn(Dist.CLIENT)
     public TextureAtlasSprite getParticleTexture(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos, ModelData modelData) {
         return getMachine(level, pos)
-                .map(machine -> machine.getRenderer().getParticleTexture(level, pos, modelData))
+                .map(RendererBlockRenderer::getMachineRenderer)
+                .map(renderer -> renderer.getParticleTexture(level, pos, modelData))
                 .orElseGet(() -> IRenderer.super.getParticleTexture(level, pos, modelData));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean hasBlockEntityRenderer(BlockEntity blockEntity) {
-        return getMachine(blockEntity).map(machine -> machine.getRenderer().hasBlockEntityRenderer(blockEntity)).orElse(false);
+        return getMachine(blockEntity).map(RendererBlockRenderer::getMachineRenderer).map(renderer -> renderer.hasBlockEntityRenderer(blockEntity)).orElse(false);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderOffScreen(BlockEntity blockEntity) {
-        return getMachine(blockEntity).map(machine -> machine.getRenderer().shouldRenderOffScreen(blockEntity)).orElse(false);
+        return getMachine(blockEntity).map(RendererBlockRenderer::getMachineRenderer).map(renderer -> renderer.shouldRenderOffScreen(blockEntity)).orElse(false);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean shouldRender(BlockEntity blockEntity, Vec3 cameraPos) {
-        return getMachine(blockEntity).map(machine -> machine.getRenderer().shouldRender(blockEntity, cameraPos)).orElseGet(() -> IRenderer.super.shouldRender(blockEntity, cameraPos));
+        return getMachine(blockEntity).map(RendererBlockRenderer::getMachineRenderer).map(renderer -> renderer.shouldRender(blockEntity, cameraPos)).orElseGet(() -> IRenderer.super.shouldRender(blockEntity, cameraPos));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(BlockEntity blockEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        getMachine(blockEntity).ifPresent(machine -> machine.getRenderer().render(blockEntity, partialTicks, stack, buffer, combinedLight, combinedOverlay));
+        getMachine(blockEntity).map(RendererBlockRenderer::getMachineRenderer).ifPresent(renderer -> renderer.render(blockEntity, partialTicks, stack, buffer, combinedLight, combinedOverlay));
+    }
+
+    private static IRenderer getMachineRenderer(RendererBlockEntity machine) {
+        return machine.getRenderer() instanceof IRenderer renderer ? renderer : IRenderer.EMPTY;
     }
 }

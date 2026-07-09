@@ -87,7 +87,7 @@ public class ClientProxy {
         for (var entry : Minecraft.getInstance().getResourceManager().listResources("models",
                 id -> id.getNamespace().equals(LDLib2.MOD_ID) && id.getPath().endsWith(".json")).entrySet()) {
             if (entry.getValue().sourcePackId().equals(LDLib2.MOD_ID)) {
-                var modelLocation = ResourceLocation.fromNamespaceAndPath(
+                var modelLocation = new ResourceLocation(
                         entry.getKey().getNamespace(),
                         entry.getKey().getPath()
                                 .replace("models/", "")

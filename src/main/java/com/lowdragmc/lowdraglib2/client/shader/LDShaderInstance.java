@@ -52,7 +52,7 @@ public class LDShaderInstance extends ShaderInstance implements ILDShaderInstanc
         for (var define : defines) {
             LDProgramDefineManager.addProgramDefine(define);
         }
-        var resourcelocation = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "shaders/core/" + location.getPath() + ".json");
+        var resourcelocation = new ResourceLocation(location.getNamespace(), "shaders/core/" + location.getPath() + ".json");
         if (resourceProvider.getResource(resourcelocation).isEmpty()) return null;
         var shaderWithDefines = new LDShaderInstance(resourceProvider, location, format, defines);
         LDProgramDefineManager.clearProgramDefines();

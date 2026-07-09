@@ -111,12 +111,20 @@ repositories {
             includeGroup 'dev.latvian.apps'
         }
     }
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content {
+            includeGroup 'thedarkcolour'
+        }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_stdlib_version}"
+    runtimeOnly "thedarkcolour:kotlinforforge:${kff_version}"
     compileOnly 'org.jetbrains:annotations:24.1.0'
 
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}") { transitive = false }

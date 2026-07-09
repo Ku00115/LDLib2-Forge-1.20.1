@@ -72,7 +72,7 @@ public class LDLibShaders {
 	}
 
 	public static Shader load(Shader.ShaderType shaderType, ResourceLocation resourceLocation) {
-		return CACHE.computeIfAbsent(ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "shaders/" + resourceLocation.getPath() + shaderType.shaderExtension), key -> {
+		return CACHE.computeIfAbsent(new ResourceLocation(resourceLocation.getNamespace(), "shaders/" + resourceLocation.getPath() + shaderType.shaderExtension), key -> {
 			try {
 				Shader shader = Shader.loadShader(shaderType, key);
 				LDLib2.LOGGER.debug("load shader {} resource {} success", shaderType, resourceLocation);

@@ -2,8 +2,8 @@ package com.lowdragmc.lowdraglib2.editor.resource;
 
 import com.lowdragmc.lowdraglib2.LDLib2Registries;
 import com.lowdragmc.lowdraglib2.client.renderer.IRenderer;
-import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlock;
-import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlockEntity;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlock;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlockEntity;
 import com.lowdragmc.lowdraglib2.client.renderer.impl.UIResourceRenderer;
 import com.lowdragmc.lowdraglib2.client.scene.FBOWorldSceneRenderer;
 import com.lowdragmc.lowdraglib2.client.scene.ImmediateWorldSceneRenderer;

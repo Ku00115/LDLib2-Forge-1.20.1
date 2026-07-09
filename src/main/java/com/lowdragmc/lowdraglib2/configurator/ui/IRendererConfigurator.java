@@ -2,8 +2,8 @@ package com.lowdragmc.lowdraglib2.configurator.ui;
 
 import com.google.common.base.Predicates;
 import com.lowdragmc.lowdraglib2.client.renderer.IRenderer;
-import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlock;
-import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlockEntity;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlock;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlockEntity;
 import com.lowdragmc.lowdraglib2.editor.resource.IRendererResource;
 import com.lowdragmc.lowdraglib2.gui.texture.Icons;
 import com.lowdragmc.lowdraglib2.gui.ui.Style;

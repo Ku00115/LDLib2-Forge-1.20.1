@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.lowdragmc.lowdraglib2.LDLib2;
 import com.lowdragmc.lowdraglib2.client.renderer.IBlockRendererProvider;
 import com.lowdragmc.lowdraglib2.client.renderer.IItemRendererProvider;
+import com.lowdragmc.lowdraglib2.common.block.RendererBlock;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.resources.model.*;
@@ -53,9 +54,9 @@ public abstract class ModelBakeryMixin {
                                                                    @Local(argsOnly = true) ModelResourceLocation modelResourceLocation,
                                                                    @Local(argsOnly = true) LocalRef<UnbakedModel> model) {
         if (!modelResourceLocation.getVariant().equals("standalone")) {
-            ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(modelResourceLocation.getNamespace(), modelResourceLocation.getPath());
+            ResourceLocation resourceLocation = new ResourceLocation(modelResourceLocation.getNamespace(), modelResourceLocation.getPath());
             var block = BuiltInRegistries.BLOCK.get(resourceLocation);
-            if (block instanceof IBlockRendererProvider) {
+            if (block instanceof IBlockRendererProvider || block == RendererBlock.BLOCK) {
                 UnbakedModel newModel = getModel(LDLib2.id("block/renderer_model"));
                 model.set(newModel);
                 return newModel.getDependencies();

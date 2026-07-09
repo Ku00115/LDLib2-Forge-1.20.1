@@ -1,5 +1,6 @@
 package com.lowdragmc.lowdraglib2.client.renderer;
 
+import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlockRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -60,9 +61,7 @@ public class ATESRRendererProvider<T extends BlockEntity> implements BlockEntity
         Level world = blockEntity.getLevel();
         if (world != null) {
             BlockState state = blockEntity.getBlockState();
-            if (state.getBlock() instanceof IBlockRendererProvider blockRendererProvider) {
-                return blockRendererProvider.getRenderer(state);
-            }
+            return RendererBlockRenderer.getRenderer(state);
         }
         return null;
     }
@@ -89,4 +88,3 @@ public class ATESRRendererProvider<T extends BlockEntity> implements BlockEntity
         return new AABB(blockEntity.getBlockPos()).inflate(64);
     }
 }
-

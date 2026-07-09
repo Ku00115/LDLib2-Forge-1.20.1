@@ -3,8 +3,8 @@ package com.lowdragmc.lowdraglib2.client.model.forge;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.lowdragmc.lowdraglib2.client.renderer.IBlockRendererProvider;
 import com.lowdragmc.lowdraglib2.client.renderer.IRenderer;
+import com.lowdragmc.lowdraglib2.client.renderer.block.RendererBlockRenderer;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -106,8 +106,8 @@ public class LDLRendererModel implements IUnbakedGeometry<LDLRendererModel> {
             var world = data.get(WORLD);
             var pos = data.get(POS);
             var modelData = data.get(MODEL_DATA);
-            if (renderer == null && state != null && state.getBlock() instanceof IBlockRendererProvider rendererProvider) {
-                renderer = rendererProvider.getRenderer(state);
+            if (renderer == null && state != null) {
+                renderer = RendererBlockRenderer.getRenderer(state);
             }
             if (renderer != null) {
                 return renderer.renderModel(world, pos, state, side, rand, modelData, renderType);
@@ -117,11 +117,9 @@ public class LDLRendererModel implements IUnbakedGeometry<LDLRendererModel> {
 
         @Override
         public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
-            if (state.getBlock() instanceof IBlockRendererProvider rendererProvider) {
-                IRenderer renderer = rendererProvider.getRenderer(state);
-                if (renderer != null) {
-                    return renderer.useAO().orElse(BakedModel.super.useAmbientOcclusion(state, renderType));
-                }
+            IRenderer renderer = RendererBlockRenderer.getRenderer(state);
+            if (renderer != null) {
+                return renderer.useAO().orElse(BakedModel.super.useAmbientOcclusion(state, renderType));
             }
             return BakedModel.super.useAmbientOcclusion(state, renderType);
         }
@@ -129,16 +127,14 @@ public class LDLRendererModel implements IUnbakedGeometry<LDLRendererModel> {
 
         @Override
         public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
-            if (state.getBlock() instanceof IBlockRendererProvider rendererProvider) {
-                IRenderer renderer = rendererProvider.getRenderer(state);
-                if (renderer != null) {
-                    modelData = ModelData.builder()
-                            .with(RENDERER, renderer)
-                            .with(WORLD, level)
-                            .with(POS, pos)
-                            .with(MODEL_DATA, modelData)
-                            .build();
-                }
+            IRenderer renderer = RendererBlockRenderer.getRenderer(state);
+            if (renderer != null) {
+                modelData = ModelData.builder()
+                        .with(RENDERER, renderer)
+                        .with(WORLD, level)
+                        .with(POS, pos)
+                        .with(MODEL_DATA, modelData)
+                        .build();
             }
             return modelData;
         }

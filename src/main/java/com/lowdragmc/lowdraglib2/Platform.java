@@ -86,11 +86,15 @@ public class Platform {
         return FMLEnvironment.dist == Dist.CLIENT;
     }
 
+    public static boolean hasClientLevel() {
+        return isClient() && Minecraft.getInstance().level != null;
+    }
+
     public static MinecraftServer getMinecraftServer() {
         return ServerLifecycleHooks.getCurrentServer();
     }
 
-    public ResourceManager getResourceProvider() {
+    public static ResourceManager getResourceProvider() {
         return ResourceHelper.getResourceManager();
     }
 
@@ -123,9 +127,9 @@ public class Platform {
 
     public static RegistryAccess getFrozenRegistry() {
         RegistryAccess serverRegistryAccess = SERVER_REGISTRY_ACCESS;
-        if (LDLib2.isServer()) {
+        if (!Platform.isClient()) {
             return serverRegistryAccess == null ? getBLANK_REGISTRY_ACCESS() : serverRegistryAccess;
-        } else if (LDLib2.isRemote()) {
+        } else if (Minecraft.getInstance().getConnection() != null) {
             if (Minecraft.getInstance().getConnection() != null) {
                 return getRegistryFromMultipleSources(Minecraft.getInstance().getConnection().registryAccess(), serverRegistryAccess);
             }
